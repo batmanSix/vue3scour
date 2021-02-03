@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- <script src="../dist/vue.global.js"></script> -->
+  <script>
+    // 4.createAppAPI
+    const createAppAPI = (render) => {
+      return function createApp(rootComponent) {
+        // 创建app并返回
+        const app = {
+          mount(container) {
+            // 1.获取vnode
+            const vnode = {
+              tag: 'h2',
+              props: null,
+              children: rootComponent.data().foo
+            }
+
+            // 2.执行render
+            render(vnode, container)
+          }
+        }
+        return app
+      }
+    }
+    
+    // 3.createRenderer
+    const createRenderer = ({querySelector, createElement, insert}) => {
+      // 定义render
+      const render = (vnode, container) => {
+        // 1.获取宿主元素
+        const parent = querySelector(container)
+        // 2.创建当前节点
+        const child = createElement(vnode.tag)
+        // 处理属性 todo        
+        // children
+        if (typeof vnode.children === 'string') {
+          child.innerText = vnode.children
+        } else {
+          // todo...
+        }
+        // 3.插入
+        insert(child, parent)
+      }
+      
+      return {
+        render,
+        createApp: createAppAPI(render)
+      }
+    }
+    
+    // 2.renderer
+    const renderer = createRenderer({
+      querySelector(sel) {
+        return document.querySelector(sel)
+      },
+      createElement(tag) {
+        return document.createElement(tag)
+      },
+      insert(child, parent) {
+        parent.appendChild(child)
+      }
+    })
+    
+    // 1.声明Vue
+    const Vue = {
+      createApp(options) {
+        return renderer.createApp(options)
+      }
+    }
+    Vue.createApp({
+      data() {
+        return {
+          foo: 'fooo'
+        }
+      },
+    })
+    // .use(store)
+    // .use(router)
+    .mount('#app')
+  </script>
+</body>
+</html>

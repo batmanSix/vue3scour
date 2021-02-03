@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <p @click="add">{{count}}</p>
+    <p>{{doubleCount}}</p>
+  </div>
+
+  <script src="../dist/vue.global.js"></script>
+  <script>
+    const { createApp, reactive, onMounted, computed, watch, toRefs, watchEffect } = Vue
+    createApp({
+      setup() {
+        // 1.消除this
+        // 2.增加可读性、维护性
+        // 3.复用性
+        const { count, doubleCount, add } = useCount()
+
+        // xxx
+
+
+        // 返回上下文是render函数中的上下文
+        return { count, doubleCount, add }
+      }
+    }).mount('#app')
+
+
+    function useCount() {
+      const state = reactive({
+        count: 0
+      })
+
+      function add() {
+        state.count++
+      }
+
+      onMounted(() => {
+        console.log('mounted');
+      })
+
+      const doubleCount = computed(() => state.count * 2)
+
+      // 参数1函数，返回观测表达式
+      watch(() => state.count, (v1, v2) => {
+        console.log('count change', v1, v2);
+      })
+      watchEffect(() => {
+        console.log('count change', state.count);
+      })
+      watchEffect(() => {
+        console.log('count change', state.count);
+      })
+      // useEffect
+      // useEffect(() => {}, [state.count])
+      return { ...toRefs(state), doubleCount, add }
+    }
+  </script>
+</body>
+
+</html>

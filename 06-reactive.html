@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <h2 id="title1"></h2>
+    <p id="desc1"></p>
+  </div>
+
+  <script src="./04-reactive.js"></script>
+  <script>
+    const data = reactive({
+      title: 'vue3响应式原理',
+      desc: '剖析细节，源码学习'
+    })
+
+    effect(() => {
+      // 组件更新函数
+      title1.textContent = data.title
+      desc1.textContent = data.desc
+
+      // vnode = render()
+      // patch(vnode, container)
+    })
+
+    setTimeout(() => {
+      data.title = '标题发生变化，实验响应式原理'
+    }, 2000)
+  </script>
+</body>
+</html>

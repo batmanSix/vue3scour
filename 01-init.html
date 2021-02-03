@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    {{foo}}
+    <comp></comp>
+  </div>
+  <script src="./vue.global.js"></script>
+  <script>
+    // 初始化
+    // vue2: new Vue().$mount()
+    // vue3: creatApp().mount()
+    // 实例方法
+    // 1.全局配置会污染
+    // 2.treeshaking
+    // 3.语义
+    const {createApp} = Vue
+    createApp({
+      data() {
+        return {
+          foo: 'fooo'
+        }
+      },
+    })
+    .component('comp', {
+      template: '<div>comp</div>'
+    })
+    // .use(store)
+    // .use(router)
+    .mount('#app')
+  </script>
+</body>
+</html>
